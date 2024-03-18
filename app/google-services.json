@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "665030900814",
+    "firebase_url": "https://findit-5161a-default-rtdb.firebaseio.com",
+    "project_id": "findit-5161a",
+    "storage_bucket": "findit-5161a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665030900814:android:81bb2bf83e94b06ea2971f",
+        "android_client_info": {
+          "package_name": "com.assignment.findit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzVqYU2lIrzal-uIKy4hCoPFLJxsV3yRA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
