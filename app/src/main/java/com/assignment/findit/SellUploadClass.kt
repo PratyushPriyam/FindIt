@@ -4,14 +4,17 @@ class SellUploadClass(
     val location: String,
     val price: Int,
     val sellerId: String,
-    val isBought: String,
-    val boughtBy: String,
-    val phno: String
+    var isBought: String,
+    var boughtBy: String,
+    val phno: String,
+    val uid: String,
+     var isBoughtByCurrentUser: Boolean = false,
+    val imageUrl: String = ""
 ) {
     // Primary constructor with arguments
 
     // Add an empty secondary constructor for Firebase
-    constructor() : this("", "", "", 0, "", "no", "", "") {
+    constructor() : this("", "", "", 0, "", "no", "", "", "", false, "") {
         // Empty implementation for the no-argument constructor
     }
 }

@@ -4,35 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".Login">
 
     <TextView
+        android:id="@+id/logIntxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Log In"
+        android:layout_marginTop="8dp"
         android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="30sp"
+        android:text="Welcome,Log In to proceed"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/logInCard"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_animation_view"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logIntxt"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/login_amination" />
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/logInCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="100dp"
         android:layout_marginEnd="30dp"
-        android:padding="20dp"
-        app:cardElevation="6dp"
-        app:cardCornerRadius="16dp"
         android:backgroundTint="@color/white"
+        android:padding="20dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/lottie_animation_view">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -44,14 +58,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:textStyle="italic|bold"
                 android:background="@color/white"
                 android:ems="10"
                 android:hint="Enter Password"
-                android:textColor="@color/black"
-                android:textColorHint="#BDB7B7"
                 android:inputType="textPassword"
                 android:padding="12dp"
+                android:textColor="@color/black"
+                android:textColorHint="#BDB7B7"
+                android:textStyle="italic|bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextText" />
@@ -61,14 +75,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:textStyle="italic|bold"
                 android:background="@color/white"
                 android:ems="10"
-                android:textColor="@color/black"
-                android:textColorHint="#BDB7B7"
                 android:hint="Enter Email"
                 android:inputType="text"
                 android:padding="16dp"
+                android:textColor="@color/black"
+                android:textColorHint="#BDB7B7"
+                android:textStyle="italic|bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -85,6 +99,7 @@
         android:layout_marginEnd="30dp"
         android:padding="16dp"
         android:text="Log In"
+        android:background="@drawable/donation_tag_style"
         android:textSize="14sp"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -114,6 +129,7 @@
         android:padding="16dp"
         android:textSize="14sp"
         android:text="Signup"
+        android:background="@drawable/donation_tag_style"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -11,28 +11,23 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class ProductAdapter(val context: Context, val productList: ArrayList<SellUploadClass>) :
-    RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class ProductAdapterGrid(val context: Context, val productList: ArrayList<SellUploadClass>) :
+    RecyclerView.Adapter<ProductAdapterGrid.ProductViewHolder>() {
 
     inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val productImage: ImageView = itemView.findViewById(R.id.imageView2)
-        val productName: TextView = itemView.findViewById(R.id.tv1)
-        val price: TextView = itemView.findViewById(R.id.textView4)
+        val productImage: ImageView = itemView.findViewById(R.id.imageViewGrid)
+        val price: TextView = itemView.findViewById(R.id.tvGridPrice)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.main_page_all_sold_card_list, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.main_page_all_sold_card_grid, parent, false)
         return ProductViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
-
-        // Set product details to the views (replace with your logic)
-        //holder.productImage.setImageResource(R.drawable.your_product_image) // Replace with image loading logic based on product data
-        holder.productName.text = "Sold By: "+product.sellerName
         holder.price.text = "Price: "+
-            product.price.toString()
+                product.price.toString()
         Glide.with(context)
             .load(product.imageUrl)  // Load image URL from SellUploadClass
             .into(holder.productImage)

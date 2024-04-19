@@ -2,4 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primary">#FFD54F</color>
+    <color name="glass_morphism_tint">#40FFFFFF</color>
 </resources>

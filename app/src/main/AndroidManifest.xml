@@ -2,31 +2,49 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.FindIt"
         tools:targetApi="31">
+        <activity
+            android:name=".Donate"
+            android:exported="true" >
+
+        </activity>
+        <activity
+            android:name=".ProcessingSell"
+            android:exported="false" />
+        <activity
+            android:name=".Buy"
+            android:exported="true" />
         <activity
             android:name=".SingleProductSell"
             android:exported="false" />
         <activity
             android:name=".Sell"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".SplashScreen"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".Signup"
             android:exported="false" />
         <activity
             android:name=".Login"
-            android:exported="false" />
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
