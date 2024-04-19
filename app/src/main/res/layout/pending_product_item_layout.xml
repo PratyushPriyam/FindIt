@@ -67,22 +67,26 @@
         android:layout_marginTop="16dp"
         android:gravity="end">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonAgree"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Agree"
+            android:textColor="@color/white"
+            android:background="@drawable/agree_button_custom"
             android:textAllCaps="false"
-            android:layout_weight="1"  android:backgroundTint="@color/black"/>
+            android:layout_weight="1"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonLeave"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:text="Leave"
+            android:textColor="@color/white"
+            android:background="@drawable/leave_button_custom"
             android:textAllCaps="false"
-            android:layout_weight="1"  android:backgroundTint="@color/black"/>
+            android:layout_weight="1"/>
     </LinearLayout>
 
 

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -98,11 +99,11 @@ class ProcessingAdapter(val context: Context, val productList: ArrayList<SellUpl
 }
 
 class PendingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val sellerNameTv: TextView = itemView.findViewById(R.id.sellerNameTv) // Assuming seller name text view ID
-    val productNameTv: TextView = itemView.findViewById(R.id.productNameTv) // Assuming product name text view ID
-    val locationTv: TextView = itemView.findViewById(R.id.locationTv) // Assuming location text view ID
-    val priceTv: TextView = itemView.findViewById(R.id.priceTv) // Assuming price text view ID
-    val phoneNoTv: TextView = itemView.findViewById(R.id.phoneNoTv) // Assuming phone number text view ID
-    val agreeBtn: Button = itemView.findViewById(R.id.buttonAgree)  // Add reference for agreeBtn
-    val leaveBtn: Button = itemView.findViewById(R.id.buttonLeave)
+    val sellerNameTv: TextView = itemView.findViewById(R.id.sellerNameTv)
+    val productNameTv: TextView = itemView.findViewById(R.id.productNameTv)
+    val locationTv: TextView = itemView.findViewById(R.id.locationTv)
+    val priceTv: TextView = itemView.findViewById(R.id.priceTv)
+    val phoneNoTv: TextView = itemView.findViewById(R.id.phoneNoTv)
+    val agreeBtn: AppCompatButton = itemView.findViewById(R.id.buttonAgree)
+    val leaveBtn: AppCompatButton = itemView.findViewById(R.id.buttonLeave)
 }
