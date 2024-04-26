@@ -25,16 +25,26 @@ import com.google.firebase.database.ValueEventListener
 import android.Manifest
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
+import android.service.autofill.UserData
+import androidx.annotation.RequiresApi
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
+import kotlin.random.Random
 
 class Sell : AppCompatActivity() {
 
     lateinit var mAuth: FirebaseAuth
-    lateinit var uidEdt: EditText
+    lateinit var uidEdt: String
     private lateinit var imageView: ImageView
     private val REQUEST_IMAGE_CAPTURE = 101
+    lateinit var database: FirebaseDatabase
+    lateinit var userRef: DatabaseReference
+    lateinit var auth: FirebaseAuth
+    lateinit var sellerName: String
+    lateinit var phno: String
+    lateinit var location: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,13 +52,9 @@ class Sell : AppCompatActivity() {
 
         // Get Firebase Authentication instance
         mAuth = FirebaseAuth.getInstance()
+        uidEdt = Random.nextInt(1, 1001).toString().trim()
 
-        val sellerNameEdt = findViewById<EditText>(R.id.sellerNameEdt)
         val productNameEdt = findViewById<EditText>(R.id.productNameEdt)
-        val locationEdt = findViewById<EditText>(R.id.locationEdt)
-        val priceEdt = findViewById<EditText>(R.id.priceEdt)
-        val phonenoEdt = findViewById<EditText>(R.id.phonenoEdt)
-        uidEdt = findViewById(R.id.uidedt)
         val sellBtn = findViewById<Button>(R.id.sellBtn)
         imageView = findViewById(R.id.imgView)
 
@@ -80,50 +86,48 @@ class Sell : AppCompatActivity() {
 
         // Set up button click listener
         sellBtn.setOnClickListener {
-            val sellerName = sellerNameEdt.text.toString().trim()
             val productName = productNameEdt.text.toString().trim()
-            val location = locationEdt.text.toString().trim()
-            var phno: String
-            val uniqueid = uidEdt.text.toString().trim()
-            var price: Int
 
-            // Input validation (optional: you can further customize error messages)
-            if (TextUtils.isEmpty(sellerName)) {
-                sellerNameEdt.requestFocus()
-                return@setOnClickListener
-            }
+
             if (TextUtils.isEmpty(productName)) {
                 productNameEdt.requestFocus()
-                return@setOnClickListener
-            }
-            if (TextUtils.isEmpty(location)) {
-                locationEdt.requestFocus()
-                return@setOnClickListener
-            }
-            if (TextUtils.isEmpty(phonenoEdt.text.toString().trim())) {
-                phno = "" // Handle empty phone number (optional)
-            } else {
-                phno = phonenoEdt.text.toString().trim()
-            }
-            if (TextUtils.isEmpty(uniqueid)) {
-                uidEdt.requestFocus()
-                return@setOnClickListener
-            }
-
-            try {
-                price = Integer.parseInt(priceEdt.text.toString().trim())
-                // Clear any previous error text
-            } catch (e: NumberFormatException) {
-                price = 0
-                priceEdt.requestFocus()
                 return@setOnClickListener
             }
 
             // **Data retrieval and writing:**
             val currentUserId = getCurrentUserId()
+            database = FirebaseDatabase.getInstance()
+            auth = FirebaseAuth.getInstance()
+            val userId = auth.currentUser?.uid
+
+            if (userId != null) {
+                userRef = database.getReference("FindIt/UserDetails/$userId")
+
+                userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    @RequiresApi(Build.VERSION_CODES.P)
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            val userData = snapshot.value as? Map<*, *>
+                            userData?.let {
+                                val name = it["name"] as? String
+                                val address = it["address"] as? String
+                                val phone = it["phone"] as? String
+                                Toast.makeText(applicationContext, "$name, $address, $phone", Toast.LENGTH_SHORT).show()
+                                location = address.toString()
+                                sellerName = name.toString()
+                                phno = phone.toString()
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        // Handle database error
+                    }
+                })
+            }
 
             // Check for existing ID before adding
-            checkForExistingId(uniqueid, currentUserId) { isUnique ->
+            checkForExistingId(uidEdt, currentUserId) { isUnique ->
                 if (isUnique) {
                     val capturedImage = imageView.drawable
                     if (capturedImage != null) {
@@ -134,25 +138,18 @@ class Sell : AppCompatActivity() {
                                 sellerName,
                                 productName,
                                 location,
-                                price,
                                 currentUserId,
                                 "no",
                                 "",
                                 phno,
-                                uniqueid,
+                                uidEdt,
                                 false,
                                 imageUrl
                             )
                             writeToDatabaseForGlobal(sellUploadClass)
                             writeToDatabase(sellUploadClass)
 
-                            // Clear input fields after successful upload (optional)
-                            sellerNameEdt.setText("")
                             productNameEdt.setText("")
-                            locationEdt.setText("")
-                            priceEdt.setText("")
-                            phonenoEdt.setText("")
-                            uidEdt.setText("")
                             imageView.setImageDrawable(null) // Clear image view after upload
                         }
                     } else {
@@ -161,25 +158,18 @@ class Sell : AppCompatActivity() {
                             sellerName,
                             productName,
                             location,
-                            price,
                             currentUserId,
                             "no",
                             "",
                             phno,
-                            uniqueid,
+                            uidEdt,
                             false,
                             ""// No image URL if not captured
                         )
                         writeToDatabaseForGlobal(sellUploadClass)
                         writeToDatabase(sellUploadClass)
 
-                        // Clear input fields after successful upload (optional)
-                        sellerNameEdt.setText("")
                         productNameEdt.setText("")
-                        locationEdt.setText("")
-                        priceEdt.setText("")
-                        phonenoEdt.setText("")
-                        uidEdt.setText("")
                     }
                 } else {
                     Toast.makeText(this, "This unique ID is already used!", Toast.LENGTH_SHORT).show()
@@ -231,7 +221,7 @@ class Sell : AppCompatActivity() {
 
     private fun writeToDatabaseForGlobal(sellUploadClass: SellUploadClass) {
         val database = FirebaseDatabase.getInstance()
-        val rootRef = database.reference.child("FindIt").child("allSold").child(uidEdt.text.toString()) // Use push() for unique key
+        val rootRef = database.reference.child("FindIt").child("allSold").child(uidEdt.toString()) // Use push() for unique key
 
         rootRef.setValue(sellUploadClass)
             .addOnCompleteListener { task ->
@@ -249,17 +239,16 @@ class Sell : AppCompatActivity() {
         val imageRef = storageRef.child("images/${System.currentTimeMillis()}.jpg") // Create unique image name
 
         val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos) // Compress image for efficient storage
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val imageData = baos.toByteArray()
 
         val uploadTask = imageRef.putBytes(imageData)
         uploadTask.addOnSuccessListener {
             it.storage.downloadUrl.addOnSuccessListener { uri ->
                 val imageUrl = uri.toString()
-                callback(imageUrl) // Call the provided callback function with the download URL
+                callback(imageUrl)
             }
         }.addOnFailureListener { exception ->
-            // Handle image upload failure
             Toast.makeText(this, "Image upload failed: ${exception.message}", Toast.LENGTH_SHORT).show()
         }
     }
@@ -268,13 +257,12 @@ class Sell : AppCompatActivity() {
     private fun writeToDatabase(sellUploadClass: SellUploadClass) {
         val database = FirebaseDatabase.getInstance()
         val rootRef = database.reference.child("FindIt").child("users")
-        val userRef = rootRef.child(sellUploadClass.sellerId).child("sell") // Use sellerId
+        val userRef = rootRef.child(sellUploadClass.sellerId).child("sell")
 
-        userRef.push().setValue(sellUploadClass) // Use push() for unique key
+        userRef.push().setValue(sellUploadClass)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this, "Data Uploaded", Toast.LENGTH_SHORT).show()
-                    // (Optional) Clear fields or perform other actions after successful upload
                 } else {
                     Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
                 }
@@ -284,7 +272,7 @@ class Sell : AppCompatActivity() {
     private fun getCurrentUserId(): String {
         val currentUser = FirebaseAuth.getInstance().currentUser
         return if (currentUser != null) {
-            currentUser.uid!! // Use !! for non-null assertion after null check
+            currentUser.uid!!
         } else {
             return ""
         }

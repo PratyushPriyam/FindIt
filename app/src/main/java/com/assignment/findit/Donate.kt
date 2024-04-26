@@ -40,10 +40,6 @@ class Donate : AppCompatActivity() {
                 for (dataSnapshot in snapshot.children) {
                     val product = dataSnapshot.getValue(SellUploadClass::class.java)!!
 
-                    // Filter for products with price 0
-                    if (product.price.toString() == "0") {
-                        productList.add(product)
-                    }
                 }
                 adapter.notifyDataSetChanged()
             }

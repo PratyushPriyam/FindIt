@@ -26,8 +26,7 @@ class ProductAdapterGrid(val context: Context, val productList: ArrayList<SellUp
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
-        holder.price.text = "Price: "+
-                product.price.toString()
+        holder.price.text = "Price: "
         Glide.with(context)
             .load(product.imageUrl)  // Load image URL from SellUploadClass
             .into(holder.productImage)
@@ -40,7 +39,6 @@ class ProductAdapterGrid(val context: Context, val productList: ArrayList<SellUp
         val intent = Intent(context, SingleProductSell::class.java)
         intent.putExtra("productimg", product.imageUrl) // Replace with actual image logic
         intent.putExtra("soldby", product.sellerName)
-        intent.putExtra("price", product.price)
         intent.putExtra("location", product.location)
         intent.putExtra("sellerid", product.sellerId)
         intent.putExtra("phno", product.phno)

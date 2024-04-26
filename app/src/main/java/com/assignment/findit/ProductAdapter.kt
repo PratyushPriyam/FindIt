@@ -31,8 +31,7 @@ class ProductAdapter(val context: Context, val productList: ArrayList<SellUpload
         // Set product details to the views (replace with your logic)
         //holder.productImage.setImageResource(R.drawable.your_product_image) // Replace with image loading logic based on product data
         holder.productName.text = "Sold By: "+product.sellerName
-        holder.price.text = "Price: "+
-            product.price.toString()
+        holder.price.text = "Price: "
         Glide.with(context)
             .load(product.imageUrl)  // Load image URL from SellUploadClass
             .into(holder.productImage)
@@ -45,7 +44,6 @@ class ProductAdapter(val context: Context, val productList: ArrayList<SellUpload
         val intent = Intent(context, SingleProductSell::class.java)
         intent.putExtra("productimg", product.imageUrl) // Replace with actual image logic
         intent.putExtra("soldby", product.sellerName)
-        intent.putExtra("price", product.price)
         intent.putExtra("location", product.location)
         intent.putExtra("sellerid", product.sellerId)
         intent.putExtra("phno", product.phno)

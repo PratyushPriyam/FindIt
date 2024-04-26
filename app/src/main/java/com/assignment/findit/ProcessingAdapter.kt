@@ -29,7 +29,6 @@ class ProcessingAdapter(val context: Context, val productList: ArrayList<SellUpl
         holder.sellerNameTv.text = "Sold By: ${product.sellerName}"
         holder.productNameTv.text = product.productName
         holder.locationTv.text = "Location: ${product.location}"
-        holder.priceTv.text = "Price: $${product.price}"
         holder.phoneNoTv.text = "Phone Number: ${product.phno}"
 
         // Handle button visibility and functionality based on isBought

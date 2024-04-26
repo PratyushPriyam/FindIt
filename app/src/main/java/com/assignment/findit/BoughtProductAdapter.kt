@@ -26,7 +26,6 @@ class BoughtProductAdapter(val context: Context, val productList: ArrayList<Sell
         holder.sellerNameTv.text = "Sold By: ${product.sellerName}"
         holder.productNameTv.text = product.productName
         holder.locationTv.text = "Location: ${product.location}"
-        holder.priceTv.text = "Price: Rs.${product.price}"
         holder.phoneNoTv.text = "Phone Number: ${product.phno}"
         // Load image using Glide
         Glide.with(context)

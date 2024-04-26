@@ -2,7 +2,6 @@ class SellUploadClass(
     val sellerName: String,
     val productName: String,
     val location: String,
-    val price: Int,
     val sellerId: String,
     var isBought: String,
     var boughtBy: String,
@@ -14,7 +13,7 @@ class SellUploadClass(
     // Primary constructor with arguments
 
     // Add an empty secondary constructor for Firebase
-    constructor() : this("", "", "", 0, "", "no", "", "", "", false, "") {
+    constructor() : this("", "", "", "", "no", "", "", "", false, "") {
         // Empty implementation for the no-argument constructor
     }
 }
