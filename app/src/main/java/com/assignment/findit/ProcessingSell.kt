@@ -2,7 +2,15 @@ package com.assignment.findit
 
 import SellUploadClass
 import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +26,8 @@ class ProcessingSell : AppCompatActivity() {
     private lateinit var productList: ArrayList<SellUploadClass>
     private lateinit var adapter: ProcessingAdapter
 
+    private val LOCATION_PERMISSION_REQUEST_CODE = 101 // Request code for location permissions
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_processing_sell)
@@ -27,6 +37,7 @@ class ProcessingSell : AppCompatActivity() {
         productList = ArrayList()
         adapter = ProcessingAdapter(this, productList)
         recyclerView.adapter = adapter
+
         // Get Firebase Database instance
         val database = FirebaseDatabase.getInstance()
 
@@ -59,5 +70,22 @@ class ProcessingSell : AppCompatActivity() {
                 // Handle database errors
             }
         })
+    }
+
+    // Handle location permission request result (optional)
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, handle click event again
+                adapter.notifyDataSetChanged() // Refresh adapter to trigger click handling
+            } else {
+                Toast.makeText(this, "Location permission is required!", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

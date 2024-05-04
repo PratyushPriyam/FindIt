@@ -15,6 +15,7 @@ import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnAdd: Button
     private lateinit var layoutSwitch: SwitchCompat
     private lateinit var planeLoad: ProgressBar
+    private lateinit var donationInfoTxt: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
         planeLoad = findViewById(R.id.planeLoad)
+        donationInfoTxt = findViewById(R.id.donationInfoTxt)
 
         layoutSwitch = findViewById(R.id.switchbtn)
 
@@ -166,13 +169,18 @@ class MainActivity : AppCompatActivity() {
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 productList.clear()
+                var donationCount = 0
                 for (dataSnapshot in snapshot.children) {
                     val product = dataSnapshot.getValue(SellUploadClass::class.java)!!
+                    if(product.isBought == "yes") {
+                        donationCount++
+                    }
                     if (product.isBought == "no" && product.sellerId != currentUserId) {
                         productList.add(product)
                     }
                 }
 
+                donationInfoTxt.text = "Total Donations using FindIt: $donationCount"
                 // Hide loading animation after data is fetched
                 planeLoad.visibility = View.GONE
 

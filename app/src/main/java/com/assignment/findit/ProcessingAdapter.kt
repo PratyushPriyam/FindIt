@@ -1,7 +1,14 @@
 package com.assignment.findit
 
 import SellUploadClass
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.LocationManager
+import android.Manifest
+import android.net.Uri
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +17,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -20,6 +29,7 @@ import com.google.firebase.database.ValueEventListener
 class ProcessingAdapter(val context: Context, val productList: ArrayList<SellUploadClass>) :
     RecyclerView.Adapter<PendingViewHolder>() {
     val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+    private val LOCATION_PERMISSION_REQUEST_CODE = 101
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PendingViewHolder {
         val view: View = LayoutInflater.from(context)
@@ -83,6 +93,19 @@ class ProcessingAdapter(val context: Context, val productList: ArrayList<SellUpl
                     // Rest of the data binding (product name, price) remains the same
                     holder.productNameTv.text = "Item Name: " + product.productName
                     holder.priceTv.text = product.qty.toString()
+                    holder.mapView.setOnClickListener {
+                        val buyerLocation = holder.locationTv.text.toString()
+
+                        // Check location permission before accessing user location
+                        if (checkLocationPermission(context)) {
+                            // Get user's current location (implementation explained later)
+                            getUserLocation(buyerLocation)
+                        } else {
+                            // Request location permission from the activity (provided in ProcessingSell.kt)
+                            requestLocationPermission(context as Activity) // Pass activity context
+                        }
+                    }
+
 
                     // Handle button visibility and functionality based on isBought
                     if (product.isBought == "pending") {
@@ -107,6 +130,70 @@ class ProcessingAdapter(val context: Context, val productList: ArrayList<SellUpl
             }
         })
     }
+
+    private fun requestLocationPermission(activity: Activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+            activity.requestPermissions(permissions, LOCATION_PERMISSION_REQUEST_CODE)
+        }
+    }
+
+
+    private fun checkLocationPermission(context: Context): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val fineLocationPermission = ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            val coarseLocationPermission = ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            return fineLocationPermission == PackageManager.PERMISSION_GRANTED &&
+                    coarseLocationPermission == PackageManager.PERMISSION_GRANTED
+        } else {
+            return true // For pre-Marshmallow devices
+        }
+    }
+
+    private fun getUserLocation(buyerLocation: String) {
+        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+
+        // Get current user's location (implementation provided previously)
+        // Once you have the user's location (latitude, longitude), store it
+        var userLatitude = 0.0 // Replace with actual user latitude
+        var userLongitude = 0.0 // Replace with actual user longitude
+
+        // Reference to Firebase Database
+        val database = FirebaseDatabase.getInstance()
+
+        // Get seller location based on current user ID (seller)
+        val sellerLocationRef = database.getReference("FindIt/UserDetails")
+            .child(currentUserId) // Seller location based on current user ID
+            .child("address") // Assuming address field holds location details
+
+        sellerLocationRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val sellerLocation = snapshot.value.toString()
+                    // Construct Google Maps URI with reversed waypoints (seller -> buyer)
+                    val googleMapsUri = Uri.parse(
+                        "geo:0,0?q=$buyerLocation&saddr=$sellerLocation($userLatitude,$userLongitude)"
+                    )
+                    val intent = Intent(Intent.ACTION_VIEW, googleMapsUri)
+                    context.startActivity(intent)
+                } else {
+                    Toast.makeText(context, "Seller location not found!", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle database errors
+            }
+        })
+    }
+
+
 
     private fun handleAgreeAction(product: SellUploadClass) {
         val reference = database.getReference("FindIt/allSold").child(product.uid)
@@ -166,4 +253,5 @@ class PendingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val leaveBtn: AppCompatButton = itemView.findViewById(R.id.buttonLeave)
     val donationsTakenTxt: TextView = itemView.findViewById(R.id.donationsTakenTxt)
     val donationsDoneTxt: TextView = itemView.findViewById(R.id.donationsDoneTxt)
+    val mapView: ImageView = itemView.findViewById(R.id.mapView)
 }
