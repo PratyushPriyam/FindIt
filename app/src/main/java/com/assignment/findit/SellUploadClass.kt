@@ -8,7 +8,8 @@ class SellUploadClass(
     val phno: String,
     val uid: String,
      var isBoughtByCurrentUser: Boolean = false,
-    val imageUrl: String = ""
+    val imageUrl: String = "",
+    var qty: Int = 0
 ) {
     // Primary constructor with arguments
 

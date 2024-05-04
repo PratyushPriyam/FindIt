@@ -3,6 +3,7 @@ package com.assignment.findit
 import SellUploadClass
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +29,11 @@ class ProcessingSell : AppCompatActivity() {
         recyclerView.adapter = adapter
         // Get Firebase Database instance
         val database = FirebaseDatabase.getInstance()
+
+        val backBtn = findViewById<AppCompatButton>(R.id.backBtn)
+        backBtn.setOnClickListener {
+            finishAfterTransition()
+        }
 
         // Fetch pending products
         val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid

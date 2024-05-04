@@ -20,7 +20,7 @@ class SplashScreen : AppCompatActivity() {
 
         progressBar = findViewById(R.id.progressBar2) // Assuming "progressBar2" is the progress bar ID
         imageView = findViewById(R.id.imageView)
-//        imageView.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink))
+        imageView.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink))
 
         // Simulate progress bar filling in 3 seconds
         val handler = Handler()

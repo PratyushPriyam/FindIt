@@ -8,10 +8,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class ProcessingAdapter(val context: Context, val productList: ArrayList<SellUploadClass>) :
     RecyclerView.Adapter<PendingViewHolder>() {
@@ -26,27 +30,82 @@ class ProcessingAdapter(val context: Context, val productList: ArrayList<SellUpl
     override fun onBindViewHolder(holder: PendingViewHolder, position: Int) {
         val product = productList[position]
 
-        holder.sellerNameTv.text = "Sold By: ${product.sellerName}"
-        holder.productNameTv.text = product.productName
-        holder.locationTv.text = "Location: ${product.location}"
-        holder.phoneNoTv.text = "Phone Number: ${product.phno}"
+        // Fetch buyer details based on boughtBy field in product
+        val buyerRef = database.getReference("FindIt/UserDetails").child(product.boughtBy)
+        buyerRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val buyerMap = snapshot.value as HashMap<String, Any>
+                    val buyerName = buyerMap["name"]?.toString() ?: ""
+                    val buyerLocation = buyerMap["address"]?.toString() ?: "" // Assuming address is stored under "address" field
+                    val buyerPhoneNo = buyerMap["phone"]?.toString() ?: ""
 
-        // Handle button visibility and functionality based on isBought
-        if (product.isBought == "pending") {
-            holder.agreeBtn.visibility = View.VISIBLE
-            holder.leaveBtn.visibility = View.VISIBLE
+                    // Donations Done count (assuming unique product IDs in "sell" node)
+                    val sellerDonationsRef = database.getReference("FindIt/users/${product.boughtBy}/sell")
+                    sellerDonationsRef.addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            var donationsDone = 0
+                            for (dataSnapshot in snapshot.children) {
+                                // Assuming each child represents a product with a unique ID
+                                donationsDone++
+                            }
+                            holder.donationsDoneTxt.text = "Donations Done: $donationsDone"
+                        }
 
-            holder.agreeBtn.setOnClickListener {
-                handleAgreeAction(product)
+                        override fun onCancelled(error: DatabaseError) {
+                            // Handle database errors here
+                        }
+                    })
+
+                    // Donations Received count (assuming "boughtBy" field for tracking)
+                    val donationsReceivedRef = database.getReference("FindIt/allSold/")
+                    donationsReceivedRef.addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            var donationsReceived = 0
+                            for (dataSnapshot in snapshot.children) {
+                                val soldProduct = dataSnapshot.getValue(SellUploadClass::class.java)!!
+                                if (soldProduct.boughtBy == product.boughtBy) {
+                                    donationsReceived++
+                                }
+                            }
+                            holder.donationsTakenTxt.text = "Donations Received: $donationsReceived"
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            // Handle database errors here
+                        }
+                    })
+
+                    holder.sellerNameTv.text = "Requested By: $buyerName"
+                    holder.locationTv.text = "Location: $buyerLocation"
+                    holder.phoneNoTv.text = "Phone Number: $buyerPhoneNo"
+
+                    // Rest of the data binding (product name, price) remains the same
+                    holder.productNameTv.text = "Item Name: " + product.productName
+                    holder.priceTv.text = product.qty.toString()
+
+                    // Handle button visibility and functionality based on isBought
+                    if (product.isBought == "pending") {
+                        holder.agreeBtn.visibility = View.VISIBLE
+                        holder.leaveBtn.visibility = View.VISIBLE
+                        // ... (existing code for button clicks)
+                    } else {
+                        holder.agreeBtn.visibility = View.GONE
+                        holder.leaveBtn.visibility = View.GONE
+                    }
+                } else {
+                    // Handle case where buyer data is not found
+                    Toast.makeText(
+                        context, "Buyer information not found!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
 
-            holder.leaveBtn.setOnClickListener {
-                handleLeaveAction(product)
+            override fun onCancelled(error: DatabaseError) {
+                // Handle database errors here
             }
-        } else {
-            holder.agreeBtn.visibility = View.GONE
-            holder.leaveBtn.visibility = View.GONE
-        }
+        })
     }
 
     private fun handleAgreeAction(product: SellUploadClass) {
@@ -105,4 +164,6 @@ class PendingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val phoneNoTv: TextView = itemView.findViewById(R.id.phoneNoTv)
     val agreeBtn: AppCompatButton = itemView.findViewById(R.id.buttonAgree)
     val leaveBtn: AppCompatButton = itemView.findViewById(R.id.buttonLeave)
+    val donationsTakenTxt: TextView = itemView.findViewById(R.id.donationsTakenTxt)
+    val donationsDoneTxt: TextView = itemView.findViewById(R.id.donationsDoneTxt)
 }

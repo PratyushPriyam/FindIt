@@ -4,18 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".SplashScreen">
 
     <TextView
         android:id="@+id/splashTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="Welcome to Empower"
+        android:text="Welcome to FindIt"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
+        android:padding="20dp"
+        android:background="@color/primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +38,9 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="300dp"
-            android:layout_height="398dp"
+            android:layout_height="400dp"
+            android:src="@drawable/main_icon"
+            android:layout_marginHorizontal="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,14 +61,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardBg" />
 
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        style="?android:attr/ratingBarStyle"
-        android:layout_width="150dp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/primary"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="10dp">
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginHorizontal="40dp"
+            android:layout_gravity="center"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
+
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

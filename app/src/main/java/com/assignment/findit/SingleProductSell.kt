@@ -1,6 +1,7 @@
 package com.assignment.findit
 
 import SellUploadClass
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
@@ -18,10 +19,10 @@ import com.google.firebase.database.ValueEventListener
 class SingleProductSell : AppCompatActivity() {
     lateinit var imgView: ImageView
     lateinit var soldby: TextView
-    lateinit var price: TextView
     lateinit var location: TextView
     lateinit var phno: TextView
     lateinit var sellerid: TextView
+    lateinit var qty_tv: TextView
     lateinit var buybtn: AppCompatButton
     lateinit var database: FirebaseDatabase
     lateinit var productRef: DatabaseReference
@@ -32,7 +33,7 @@ class SingleProductSell : AppCompatActivity() {
 
         imgView = findViewById(R.id.imageView3)
         soldby = findViewById(R.id.soldbytv)
-        price = findViewById(R.id.pricetv)
+        qty_tv = findViewById(R.id.qty_tv)
         phno = findViewById(R.id.phnotv)
         location = findViewById(R.id.loctv)
         sellerid = findViewById(R.id.idtv)
@@ -42,20 +43,19 @@ class SingleProductSell : AppCompatActivity() {
         // Retrieve product details from intent
         val productImgUrl = intent.getStringExtra("productimg")
         val soldBy = intent.getStringExtra("soldby")
-        val iprice = intent.getIntExtra("price", 0) // Use getIntExtra for price
         val ilocation = intent.getStringExtra("location")
         val sellerId = intent.getStringExtra("sellerid")
         val iphno = intent.getStringExtra("phno")
         val uid = intent.getStringExtra("uid")
-        Toast.makeText(this, uid, Toast.LENGTH_SHORT).show()
+        val qty = intent.getIntExtra("qty", 0)
 
         // Set product details to the views
         Glide.with(this).load(productImgUrl).into(imgView) // Use Glide for image loading
         soldby.text = "Sold By: $soldBy"
-        price.text = "Price: $iprice"
         phno.text = "Phone Number: $iphno"
         location.text = "Location: $ilocation"
         sellerid.text = "Seller ID: $sellerId"
+        qty_tv.text = "Qty: $qty"
 
         val backBtn = findViewById<AppCompatButton>(R.id.backBtn)
         backBtn.setOnClickListener {
@@ -67,7 +67,7 @@ class SingleProductSell : AppCompatActivity() {
             val reference = database.getReference("FindIt/allSold")
 
             database = FirebaseDatabase.getInstance()
-            Toast.makeText(applicationContext, "Are you sure you want to buy this product?", Toast.LENGTH_SHORT).show()
+            buybtn.text = "Press again to sent buying request"
 
             buybtn.setOnClickListener {
                 val currentUserId = getCurrentUserId()
@@ -95,7 +95,7 @@ class SingleProductSell : AppCompatActivity() {
                                                 "Purchase request sent!",
                                                 Toast.LENGTH_SHORT
                                             ).show()
-                                            // (Optional) Handle successful purchase request (e.g., navigate to a different screen)
+                                            startActivity(Intent(applicationContext, MainActivity::class.java))
                                         } else {
                                             Toast.makeText(
                                                 applicationContext,

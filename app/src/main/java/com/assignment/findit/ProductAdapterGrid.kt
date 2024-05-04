@@ -17,6 +17,7 @@ class ProductAdapterGrid(val context: Context, val productList: ArrayList<SellUp
     inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val productImage: ImageView = itemView.findViewById(R.id.imageViewGrid)
         val price: TextView = itemView.findViewById(R.id.tvGridPrice)
+        val qty: TextView = itemView.findViewById(R.id.gridName)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -26,7 +27,8 @@ class ProductAdapterGrid(val context: Context, val productList: ArrayList<SellUp
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
-        holder.price.text = "Price: "
+        holder.price.text = "Quantity: " + product.qty
+        holder.qty.text = "Seller: " + product.sellerName
         Glide.with(context)
             .load(product.imageUrl)  // Load image URL from SellUploadClass
             .into(holder.productImage)
@@ -43,6 +45,7 @@ class ProductAdapterGrid(val context: Context, val productList: ArrayList<SellUp
         intent.putExtra("sellerid", product.sellerId)
         intent.putExtra("phno", product.phno)
         intent.putExtra("uid", product.uid)
+        intent.putExtra("qty", product.qty)
         context.startActivity(intent)
     }
 

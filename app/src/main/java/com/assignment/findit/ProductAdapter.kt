@@ -16,8 +16,9 @@ class ProductAdapter(val context: Context, val productList: ArrayList<SellUpload
 
     inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val productImage: ImageView = itemView.findViewById(R.id.imageView2)
-        val productName: TextView = itemView.findViewById(R.id.tv1)
-        val price: TextView = itemView.findViewById(R.id.textView4)
+        val sellerName: TextView = itemView.findViewById(R.id.tv1)
+        val qty: TextView = itemView.findViewById(R.id.textView4)
+        val productName: TextView = itemView.findViewById(R.id.listNameTxt)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -30,8 +31,9 @@ class ProductAdapter(val context: Context, val productList: ArrayList<SellUpload
 
         // Set product details to the views (replace with your logic)
         //holder.productImage.setImageResource(R.drawable.your_product_image) // Replace with image loading logic based on product data
-        holder.productName.text = "Sold By: "+product.sellerName
-        holder.price.text = "Price: "
+        holder.sellerName.text = "Sold By: "+product.sellerName
+        holder.qty.text = "Qty: " + product.qty
+        holder.productName.text = "Item : " + product.productName
         Glide.with(context)
             .load(product.imageUrl)  // Load image URL from SellUploadClass
             .into(holder.productImage)
@@ -48,6 +50,7 @@ class ProductAdapter(val context: Context, val productList: ArrayList<SellUpload
         intent.putExtra("sellerid", product.sellerId)
         intent.putExtra("phno", product.phno)
         intent.putExtra("uid", product.uid)
+        intent.putExtra("qty", product.qty)
         context.startActivity(intent)
     }
 

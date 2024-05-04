@@ -70,14 +70,12 @@ class MainActivity : AppCompatActivity() {
         val subButtonAnimationHorizontal = AnimationUtils.loadAnimation(this, R.anim.sub_button_animation_horizontal)
         val subButtonAnimationVertical = AnimationUtils.loadAnimation(this, R.anim.sub_button_animation_vertical)
         val subButtonAnimationDiagonal = AnimationUtils.loadAnimation(this, R.anim.sub_button_animation_diagonal)
-        val logOutEntry = AnimationUtils.loadAnimation(this, R.anim.sub_button_logout_entry)
 
 
         val floatingActionButton = findViewById<LottieAnimationView>(R.id.floatingActionButton)
         val fabSubBtn1 = findViewById<FloatingActionButton>(R.id.personFab)
         val fabSubBtn2 = findViewById<FloatingActionButton>(R.id.pendingFab)
         val fabSubBtn3 = findViewById<FloatingActionButton>(R.id.addtoinventoryFab)
-        val logOutFab = findViewById<FloatingActionButton>(R.id.logoutFab)
         var isRotated = false
         floatingActionButton.setOnClickListener {
             val anim = RotateAnimation(
@@ -117,35 +115,6 @@ class MainActivity : AppCompatActivity() {
                 val options = ActivityOptions.makeSceneTransitionAnimation(this)
                 startActivity(exploreIntent, options.toBundle())
             }
-            logOutFab.setOnClickListener {
-                // Inflate the custom layout for the dialog
-                val view = LayoutInflater.from(this).inflate(R.layout.custom_layout_dialog, null)
-
-                // Create an AlertDialog builder
-                val builder = AlertDialog.Builder(this)
-
-                // Set the custom view for the dialog
-                builder.setView(view)
-
-                // Find the buttons from the custom layout
-                val yesButton = view.findViewById<Button>(R.id.yesButton)
-
-                // Set positive (Yes) button click listener
-                yesButton.setOnClickListener {
-                    // User clicked "Yes", proceed with logout
-                    val firebaseAuth = FirebaseAuth.getInstance()
-                    firebaseAuth.signOut()
-
-                    val profileIntent = Intent(this, Login::class.java)
-                    val options = ActivityOptions.makeSceneTransitionAnimation(this)
-                    startActivity(profileIntent, options.toBundle())
-                }
-
-                // Create and show the alert dialog
-                val dialog = builder.create()
-                dialog.show()
-            }
-
 
             if (isRotated) {
                 floatingActionButton.startAnimation(reverseAnim) // Use reverseAnim for reversed rotation
@@ -154,7 +123,6 @@ class MainActivity : AppCompatActivity() {
                 fabSubBtn1.visibility = View.GONE
                 fabSubBtn2.visibility = View.GONE
                 fabSubBtn3.visibility = View.GONE
-                logOutFab.visibility = View.GONE
 
                 fabSubBtn1.startAnimation(
                     AnimationUtils.loadAnimation(
@@ -174,22 +142,14 @@ class MainActivity : AppCompatActivity() {
                         R.anim.sub_button_animation_horizantal_back
                     )
                 )
-                logOutFab.startAnimation(
-                    AnimationUtils.loadAnimation(
-                        this,
-                        R.anim.sub_button_logout_exit
-                    )
-                )
             } else {
                 floatingActionButton.startAnimation(anim)
                 fabSubBtn1.visibility = View.VISIBLE
                 fabSubBtn2.visibility = View.VISIBLE
                 fabSubBtn3.visibility = View.VISIBLE
-                logOutFab.visibility = View.VISIBLE
                 fabSubBtn1.startAnimation(subButtonAnimationVertical)
                 fabSubBtn2.startAnimation(subButtonAnimationDiagonal)
                 fabSubBtn3.startAnimation(subButtonAnimationHorizontal)
-                logOutFab.startAnimation(logOutEntry)
                 isRotated = true
             }
         }

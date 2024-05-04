@@ -1,7 +1,12 @@
 package com.assignment.findit
 
 import SellUploadClass
+import android.app.ActivityOptions
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -18,6 +23,7 @@ class Buy : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var productList: ArrayList<SellUploadClass>
     private lateinit var adapter: BoughtProductAdapter
+    lateinit var logOutFab: AppCompatButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +39,36 @@ class Buy : AppCompatActivity() {
         productList = ArrayList()
         adapter = BoughtProductAdapter(this, productList)
         recyclerView.adapter = adapter
+
+        logOutFab = findViewById(R.id.logoutFab)
+        logOutFab.setOnClickListener {
+            // Inflate the custom layout for the dialog
+            val view = LayoutInflater.from(this).inflate(R.layout.custom_layout_dialog, null)
+
+            // Create an AlertDialog builder
+            val builder = AlertDialog.Builder(this)
+
+            // Set the custom view for the dialog
+            builder.setView(view)
+
+            // Find the buttons from the custom layout
+            val yesButton = view.findViewById<Button>(R.id.yesButton)
+
+            // Set positive (Yes) button click listener
+            yesButton.setOnClickListener {
+                // User clicked "Yes", proceed with logout
+                val firebaseAuth = FirebaseAuth.getInstance()
+                firebaseAuth.signOut()
+
+                val profileIntent = Intent(this, Login::class.java)
+                val options = ActivityOptions.makeSceneTransitionAnimation(this)
+                startActivity(profileIntent, options.toBundle())
+            }
+
+            // Create and show the alert dialog
+            val dialog = builder.create()
+            dialog.show()
+        }
 
         fetchBoughtProducts()
     }

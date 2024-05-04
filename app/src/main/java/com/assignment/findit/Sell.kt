@@ -28,6 +28,8 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.service.autofill.UserData
+import android.view.View
+import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
@@ -45,6 +47,7 @@ class Sell : AppCompatActivity() {
     lateinit var sellerName: String
     lateinit var phno: String
     lateinit var location: String
+    lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +58,7 @@ class Sell : AppCompatActivity() {
         uidEdt = Random.nextInt(1, 1001).toString().trim()
 
         val productNameEdt = findViewById<EditText>(R.id.productNameEdt)
+        progressBar = findViewById(R.id.progressBar)
         val sellBtn = findViewById<Button>(R.id.sellBtn)
         imageView = findViewById(R.id.imgView)
 
@@ -87,12 +91,17 @@ class Sell : AppCompatActivity() {
         // Set up button click listener
         sellBtn.setOnClickListener {
             val productName = productNameEdt.text.toString().trim()
+            val productQtyEdt = findViewById<EditText>(R.id.productQtyEdt)
+            val productQty = productQtyEdt.text.toString().trim().toIntOrNull() ?: 0
 
 
             if (TextUtils.isEmpty(productName)) {
                 productNameEdt.requestFocus()
                 return@setOnClickListener
             }
+
+            // Make progress bar visible
+            progressBar.visibility = View.VISIBLE
 
             // **Data retrieval and writing:**
             val currentUserId = getCurrentUserId()
@@ -144,7 +153,8 @@ class Sell : AppCompatActivity() {
                                 phno,
                                 uidEdt,
                                 false,
-                                imageUrl
+                                imageUrl,
+                                productQty
                             )
                             writeToDatabaseForGlobal(sellUploadClass)
                             writeToDatabase(sellUploadClass)
@@ -164,17 +174,21 @@ class Sell : AppCompatActivity() {
                             phno,
                             uidEdt,
                             false,
-                            ""// No image URL if not captured
+                            "",
+                            productQty
                         )
                         writeToDatabaseForGlobal(sellUploadClass)
                         writeToDatabase(sellUploadClass)
 
+                        progressBar.visibility = View.GONE
                         productNameEdt.setText("")
                     }
                 } else {
+                    progressBar.visibility = View.GONE
                     Toast.makeText(this, "This unique ID is already used!", Toast.LENGTH_SHORT).show()
                 }
             }
+
         }
 
     }
@@ -228,6 +242,7 @@ class Sell : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Toast message can be removed if you prefer
                     Toast.makeText(this, "Data Uploaded to allSold", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, MainActivity::class.java))
                 } else {
                     Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
                 }
