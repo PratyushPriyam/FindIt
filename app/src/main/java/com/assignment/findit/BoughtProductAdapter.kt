@@ -24,7 +24,7 @@ class BoughtProductAdapter(val context: Context, val productList: ArrayList<Sell
 
         holder.sellerNameTv.text = "Donated By: ${product.sellerName}"
         holder.productNameTv.text = "Product Name: "+product.productName
-//        holder.locationTv.text = "Location: ${product.location}"
+        holder.qty_tv.text = "Quantity: " + product.qty
         holder.phoneNoTv.text = "Phone Number: ${product.phno}"
         // Load image using Glide
         Glide.with(context)
@@ -45,6 +45,6 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val productIv: ImageView = itemView.findViewById(R.id.product_image)
     val sellerNameTv: TextView = itemView.findViewById(R.id.seller_name_tv)
     val productNameTv: TextView = itemView.findViewById(R.id.product_name_tv)
-    val locationTv: TextView = itemView.findViewById(R.id.qty_tv)
+    val qty_tv: TextView = itemView.findViewById(R.id.qty_tv)
     val phoneNoTv: TextView = itemView.findViewById(R.id.phone_no_tv)
 }
