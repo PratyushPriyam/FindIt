@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -14,6 +16,7 @@
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fitsSystemWindows="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/main_icon"
         android:label="@string/app_name"
@@ -22,12 +25,12 @@
         android:theme="@style/Theme.FindIt"
         tools:targetApi="31">
         <activity
-            android:name=".Profile"
+            android:name=".ForgotPassword"
             android:exported="true">
 
         </activity>
         <activity
-            android:name=".Donate"
+            android:name=".Profile"
             android:exported="true"></activity>
         <activity
             android:name=".ProcessingSell"
@@ -43,7 +46,13 @@
             android:exported="true" />
         <activity
             android:name=".SplashScreen"
-            android:exported="true">
+            android:exported="true"></activity>
+        <activity
+            android:name=".Signup"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,14 +60,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Signup"
-            android:exported="false" />
-        <activity
-            android:name=".Login"
-            android:exported="true"></activity>
-        <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:fitsSystemWindows="true">
 
         </activity>
     </application>

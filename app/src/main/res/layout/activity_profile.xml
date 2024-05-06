@@ -106,6 +106,18 @@
 
     </androidx.cardview.widget.CardView>
 
+    <TextView
+        android:id="@+id/tvip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toTopOf="@id/saveProfileButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/saveProfileButton"
         android:layout_width="match_parent"

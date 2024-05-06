@@ -9,6 +9,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +27,11 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         auth = FirebaseAuth.getInstance()
+
+        val forgotpassTxt = findViewById<TextView>(R.id.forgotpassTxt)
+        forgotpassTxt.setOnClickListener{
+            startActivity(Intent(this, ForgotPassword::class.java))
+        }
 
         emailEdt = findViewById(R.id.editTextText)
         passEdt = findViewById(R.id.editTextText3)

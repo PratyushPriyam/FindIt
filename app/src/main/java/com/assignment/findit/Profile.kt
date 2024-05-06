@@ -1,12 +1,16 @@
 package com.assignment.findit
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.net.wifi.WifiManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.format.Formatter
 import android.transition.Slide
 import android.view.Gravity
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.google.firebase.auth.FirebaseAuth
@@ -40,6 +44,9 @@ class Profile : AppCompatActivity() {
 
         // Fetch user details from Firebase
         fetchUserDetails()
+
+        // Get WIFI IP Address
+        enableWifi()
 
         saveButton.setOnClickListener {
             showUpdateConfirmationDialog()
@@ -105,6 +112,13 @@ class Profile : AppCompatActivity() {
                     Toast.makeText(this, "Error updating profile: $error", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+    private fun enableWifi() {
+        val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val winfo = wifiManager.connectionInfo
+        val ipaddress = Formatter.formatIpAddress(winfo.ipAddress)
+        val iptv = findViewById<TextView>(R.id.tvip)
+        iptv.text = "Your current ip address is: " + ipaddress
     }
 }
 
