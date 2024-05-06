@@ -5,8 +5,10 @@ import android.app.ActivityOptions
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.transition.Slide
 import com.google.android.gms.tasks.OnCompleteListener
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
@@ -45,6 +47,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.enterTransition = Slide(Gravity.END)
+        window.exitTransition = Slide(Gravity.START)
         setContentView(R.layout.activity_main)
 
         recyclerView = findViewById(R.id.recview)
@@ -92,8 +96,8 @@ class MainActivity : AppCompatActivity() {
             anim.interpolator = LinearInterpolator()
 
             val reverseAnim = RotateAnimation(
-                70f, // Start from 45 degrees (reversed)
-                0f, // Rotate to 0 degrees
+                45f,
+                0f,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f
             )
@@ -120,7 +124,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             if (isRotated) {
-                floatingActionButton.startAnimation(reverseAnim) // Use reverseAnim for reversed rotation
+                floatingActionButton.startAnimation(reverseAnim)
                 isRotated = false
                 isRotated = false
                 fabSubBtn1.visibility = View.GONE
@@ -181,15 +185,13 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 donationInfoTxt.text = "Total Donations using FindIt: $donationCount"
-                // Hide loading animation after data is fetched
                 planeLoad.visibility = View.GONE
 
                 adapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle database errors here
-                planeLoad.visibility = View.GONE  // Hide loading animation on error
+                planeLoad.visibility = View.GONE
             }
         })
     }

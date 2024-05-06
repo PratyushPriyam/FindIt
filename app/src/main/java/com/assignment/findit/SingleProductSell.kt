@@ -4,6 +4,8 @@ import SellUploadClass
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.transition.Slide
+import android.view.Gravity
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -29,6 +31,8 @@ class SingleProductSell : AppCompatActivity() {
     lateinit var productList: ArrayList<HashMap<String, Any>> // Store products as Maps
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.enterTransition = Slide(Gravity.END)
+        window.exitTransition = Slide(Gravity.START)
         setContentView(R.layout.activity_single_product_sell)
 
         imgView = findViewById(R.id.imageView3)

@@ -5,6 +5,8 @@ import android.app.ActivityOptions
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.transition.Slide
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.Toast
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -27,12 +30,17 @@ class Buy : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.enterTransition = Slide(Gravity.END)
+        window.exitTransition = Slide(Gravity.START)
         setContentView(R.layout.activity_buy)
 
         val backBtn = findViewById<AppCompatButton>(R.id.backBtn)
         backBtn.setOnClickListener {
             finishAfterTransition()
         }
+
+        val floatingActionButton2 = findViewById<FloatingActionButton>(R.id.floatingActionButton2)
+        floatingActionButton2.setOnClickListener { startActivity(Intent(this, Profile::class.java)) }
 
         recyclerView = findViewById(R.id.buyrecview)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -42,21 +50,15 @@ class Buy : AppCompatActivity() {
 
         logOutFab = findViewById(R.id.logoutFab)
         logOutFab.setOnClickListener {
-            // Inflate the custom layout for the dialog
             val view = LayoutInflater.from(this).inflate(R.layout.custom_layout_dialog, null)
 
-            // Create an AlertDialog builder
             val builder = AlertDialog.Builder(this)
 
-            // Set the custom view for the dialog
             builder.setView(view)
 
-            // Find the buttons from the custom layout
             val yesButton = view.findViewById<Button>(R.id.yesButton)
 
-            // Set positive (Yes) button click listener
             yesButton.setOnClickListener {
-                // User clicked "Yes", proceed with logout
                 val firebaseAuth = FirebaseAuth.getInstance()
                 firebaseAuth.signOut()
 
@@ -65,7 +67,6 @@ class Buy : AppCompatActivity() {
                 startActivity(profileIntent, options.toBundle())
             }
 
-            // Create and show the alert dialog
             val dialog = builder.create()
             dialog.show()
         }
@@ -75,7 +76,7 @@ class Buy : AppCompatActivity() {
 
     private fun fetchBoughtProducts() {
         val database = FirebaseDatabase.getInstance()
-        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid // Assuming user is logged in
+        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
         val reference = database.getReference("FindIt/allSold")
             .orderByChild("boughtBy")
@@ -95,7 +96,6 @@ class Buy : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle database errors here
                 Toast.makeText(applicationContext, "Error fetching bought products", Toast.LENGTH_SHORT).show()
             }
         })

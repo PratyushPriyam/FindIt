@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="14dp"
         android:textColor="#16CA1D"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -58,7 +58,7 @@
         android:background="@color/primary"
         android:gravity="center"
         android:padding="20dp"
-        android:text="Welcome to the marketplace"
+        android:text="Welcome to the Main Page"
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -67,16 +67,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-    <!--        android:id="@+id/floatingActionButton"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginEnd="24dp"-->
-    <!--        android:layout_marginBottom="24dp"-->
-    <!--        android:clickable="true"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:srcCompat="@drawable/baseline_brightness_high_24" />-->
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/floatingActionButton"
@@ -96,7 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
-        android:src="@drawable/baseline_person_24"
+        android:src="@drawable/cart"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/floatingActionButton"
         app:layout_constraintEnd_toEndOf="parent" />

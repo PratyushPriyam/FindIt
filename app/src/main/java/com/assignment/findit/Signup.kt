@@ -30,7 +30,8 @@ class Signup : AppCompatActivity() {
     lateinit var userRef: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.enterTransition = Slide(Gravity.LEFT)
+        window.enterTransition = Slide(Gravity.END)
+        window.exitTransition = Slide(Gravity.START)
         setContentView(R.layout.activity_signup)
         auth = FirebaseAuth.getInstance()
         emailEdt = findViewById(R.id.editTextText4)

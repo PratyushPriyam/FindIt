@@ -26,9 +26,9 @@ class BoughtProductAdapter(val context: Context, val productList: ArrayList<Sell
         holder.productNameTv.text = "Product Name: "+product.productName
         holder.qty_tv.text = "Quantity: " + product.qty
         holder.phoneNoTv.text = "Phone Number: ${product.phno}"
-        // Load image using Glide
+
         Glide.with(context)
-            .load(product.imageUrl)  // Load image URL from SellUploadClass
+            .load(product.imageUrl)
             .into(holder.productIv)
     }
 

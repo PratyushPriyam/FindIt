@@ -28,6 +28,8 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.service.autofill.UserData
+import android.transition.Slide
+import android.view.Gravity
 import android.view.View
 import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
@@ -51,6 +53,8 @@ class Sell : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.enterTransition = Slide(Gravity.END)
+        window.exitTransition = Slide(Gravity.START)
         setContentView(R.layout.activity_sell)
 
         // Get Firebase Authentication instance

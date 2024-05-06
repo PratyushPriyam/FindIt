@@ -21,7 +21,8 @@ class Login : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.enterTransition = Slide(Gravity.LEFT)
+        window.enterTransition = Slide(Gravity.END)
+        window.exitTransition = Slide(Gravity.START)
         setContentView(R.layout.activity_login)
 
         auth = FirebaseAuth.getInstance()

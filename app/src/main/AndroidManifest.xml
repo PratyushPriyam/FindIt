@@ -2,12 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
+
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -21,10 +22,13 @@
         android:theme="@style/Theme.FindIt"
         tools:targetApi="31">
         <activity
-            android:name=".Donate"
-            android:exported="true" >
+            android:name=".Profile"
+            android:exported="true">
 
         </activity>
+        <activity
+            android:name=".Donate"
+            android:exported="true"></activity>
         <activity
             android:name=".ProcessingSell"
             android:exported="false" />
@@ -39,25 +43,23 @@
             android:exported="true" />
         <activity
             android:name=".SplashScreen"
-            android:exported="true" >
-
-        </activity>
-        <activity
-            android:name=".Signup"
-            android:exported="false" />
-        <activity
-            android:name=".Login"
-            android:exported="true">
-
-        </activity>
-        <activity
-            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".Signup"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
+            android:exported="true"></activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+
         </activity>
     </application>
 

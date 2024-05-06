@@ -9,6 +9,8 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.transition.Slide
+import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
@@ -30,6 +32,8 @@ class ProcessingSell : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.enterTransition = Slide(Gravity.END)
+        window.exitTransition = Slide(Gravity.START)
         setContentView(R.layout.activity_processing_sell)
 
         recyclerView = findViewById(R.id.processrecview) // Assuming ID for recycler view

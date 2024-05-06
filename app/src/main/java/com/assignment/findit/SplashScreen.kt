@@ -3,6 +3,8 @@ package com.assignment.findit
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.transition.Slide
+import android.view.Gravity
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -16,9 +18,11 @@ class SplashScreen : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.enterTransition = Slide(Gravity.END)
+        window.exitTransition = Slide(Gravity.START)
         setContentView(R.layout.activity_splash_screen)
 
-        progressBar = findViewById(R.id.progressBar2) // Assuming "progressBar2" is the progress bar ID
+        progressBar = findViewById(R.id.progressBar2)
         imageView = findViewById(R.id.imageView)
         imageView.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink))
 
