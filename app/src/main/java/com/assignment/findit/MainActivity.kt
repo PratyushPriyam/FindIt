@@ -16,6 +16,8 @@ import android.view.animation.AnimationUtils
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -44,6 +46,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var layoutSwitch: SwitchCompat
     private lateinit var planeLoad: ProgressBar
     private lateinit var donationInfoTxt: TextView
+    private lateinit var filterEdt: EditText
+    private lateinit var filterImg: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +64,27 @@ class MainActivity : AppCompatActivity() {
         donationInfoTxt = findViewById(R.id.donationInfoTxt)
 
         layoutSwitch = findViewById(R.id.switchbtn)
+
+        // Searching Option
+        filterEdt = findViewById(R.id.searchEdt) // Replace with your EditText id
+        filterImg = findViewById(R.id.searchImg) // Replace with your ImageView id
+
+        filterImg.setOnClickListener {
+            val filterText = filterEdt.text.toString().trim()
+            if (filterText.isNotEmpty()) {
+                val filteredList = productList.filter { product ->
+                    product.productName.toLowerCase().contains(filterText.toLowerCase())
+                } as ArrayList<SellUploadClass>
+                adapter = ProductAdapter(this, filteredList)
+                recyclerView.adapter = adapter
+                adapter.notifyDataSetChanged()
+            } else {
+                // Reset filter to full product list
+                adapter = ProductAdapter(this, productList)
+                recyclerView.adapter = adapter
+                adapter.notifyDataSetChanged()
+            }
+        }
 
         layoutSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -187,7 +212,8 @@ class MainActivity : AppCompatActivity() {
                 donationInfoTxt.text = "Total Donations using FindIt: $donationCount"
                 planeLoad.visibility = View.GONE
 
-                adapter.notifyDataSetChanged()
+                adapter = ProductAdapter(this@MainActivity, productList)
+                recyclerView.adapter = adapter
             }
 
             override fun onCancelled(error: DatabaseError) {

@@ -49,17 +49,34 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
+        android:id="@+id/brightnesstv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="40dp"
+        android:background="@color/white"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardBg" />
+
+    <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="60dp"
         android:text="Loading... Please Wait"
-        android:textStyle="bold"
-        android:textSize="30sp"
         android:textColor="@color/black"
+        android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardBg" />
+        app:layout_constraintTop_toBottomOf="@+id/brightnesstv" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

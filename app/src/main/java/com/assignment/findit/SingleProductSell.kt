@@ -2,10 +2,13 @@ package com.assignment.findit
 
 import SellUploadClass
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.transition.Slide
 import android.view.Gravity
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -17,6 +20,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.util.Locale
 
 class SingleProductSell : AppCompatActivity() {
     lateinit var imgView: ImageView
@@ -28,7 +32,7 @@ class SingleProductSell : AppCompatActivity() {
     lateinit var buybtn: AppCompatButton
     lateinit var database: FirebaseDatabase
     lateinit var productRef: DatabaseReference
-    lateinit var productList: ArrayList<HashMap<String, Any>> // Store products as Maps
+    lateinit var productList: ArrayList<HashMap<String, Any>>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.enterTransition = Slide(Gravity.END)
@@ -65,6 +69,21 @@ class SingleProductSell : AppCompatActivity() {
         backBtn.setOnClickListener {
             finishAfterTransition()
         }
+
+        // Google map integration
+        val mapLoc = findViewById<ImageView>(R.id.mapLoc)
+        mapLoc.setOnClickListener {
+            val sellerLocation = location.text.toString().trim() // Extract location text
+            if (sellerLocation.isNotEmpty()) {
+                val intent = Intent(Intent.ACTION_VIEW,
+                    Uri.parse("geo:0,0?q=$sellerLocation")) // Intent to open Google Maps app
+                intent.setPackage("com.google.android.apps.maps") // Specify Google Maps app package
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Seller location not available", Toast.LENGTH_SHORT).show()
+            }
+        }
+
 
         buybtn.setOnClickListener {
             database = FirebaseDatabase.getInstance()
@@ -145,4 +164,5 @@ class SingleProductSell : AppCompatActivity() {
             ""
         }
     }
+
 }

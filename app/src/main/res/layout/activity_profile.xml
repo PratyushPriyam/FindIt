@@ -138,7 +138,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
-        android:text="Thank You for using our app.\n We strive to make it a better experience.\For any queries, you can contact us at pratyushpriyam49@gmail.com"
+        android:text="Thank You for using our app.\n We strive to make it a better experience.\For any queries, you can contact us at findit@gmail.com"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
